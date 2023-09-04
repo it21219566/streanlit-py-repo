@@ -43,7 +43,7 @@ def main():
         st.write(f"**Total Cost: ${total_cost:.2f}**")
 
     elif choice == "Shipping":
-        st.subheader("Shipping")
+        st.subheader("Shipping Address")
 
         # Create a shipping details form
         with st.form("shipping_details_form"):
@@ -74,7 +74,7 @@ def main():
             # Need to redirect to the next step (e.g., Billing)...
 
     elif choice == "Billing":
-        st.subheader("Billing")
+        st.subheader("Billing Address")
 
         # Billing Details form
         with st.form("billing_details_form"):
@@ -103,6 +103,8 @@ def main():
             }
             st.success("Billing details submitted successfully!")
 
+        st.subheader("Payment Details")
+        # Payment details form
         with st.form("payment_details_form"):
             # Create a payment details form
             credit_card_number = st.text_input("Credit Card Number")
