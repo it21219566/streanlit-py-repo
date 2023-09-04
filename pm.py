@@ -1,46 +1,41 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 
-def load_product_data():
-  """Loads the product data into a Pandas DataFrame."""
-  data = pd.read_csv("products.csv")
-  return data
+# Create a dictionary to store product information
+products = {
+    'Product 1': 10.00,
+    'Product 2': 15.00,
+    'Product 3': 20.00,
+}
 
-def render_shopping_cart_page():
-  """Renders the shopping cart page."""
-  # Header
-  st.header("Shopping Cart")
+# Initialize an empty cart
+cart = {}
 
-  # Search bar
-  search_term = st.text_input("Search for products:")
+# Streamlit app
+def main():
+    st.title("Shopping Cart Web App")
 
-  # Product list
-  products = load_product_data()
-  if search_term:
-    products = products[products["name"].str.contains(search_term)]
+    st.sidebar.header("Products")
+    selected_product = st.sidebar.selectbox("Select a product:", list(products.keys()))
+    quantity = st.sidebar.number_input("Quantity:", 1, 100, 1)
 
-  st.table(products)
+    if st.sidebar.button("Add to Cart"):
+        if selected_product in cart:
+            cart[selected_product] += quantity
+        else:
+            cart[selected_product] = quantity
 
-  # Total price
-  total_price = 0
-  for product in products.itertuples():
-    total_price += product[2]
+    if st.sidebar.button("Clear Cart"):
+        cart.clear()
 
-  st.write("Total price: $", total_price)
+    st.sidebar.header("Cart")
+    for product, qty in cart.items():
+        st.sidebar.write(f"{product}: {qty} items")
 
-  # Shipping and billing information
-  shipping_address = st.text_input("Shipping address:")
-  billing_address = st.text_input("Billing address:")
+    total_cost = sum(products[product] * qty for product, qty in cart.items())
+    st.sidebar.subheader(f"Total Cost: ${total_cost:.2f}")
 
-  # Order summary
-  st.write("Order summary:")
-  st.write("Shipping address:", shipping_address)
-  st.write("Billing address:", billing_address)
-  st.write("Total price: $", total_price)
-
-  # Checkout button
-  st.button("Checkout")
+    st.write("## Welcome to the Shopping Cart Web App")
+    st.write("Browse products on the left sidebar and add them to your cart.")
 
 if __name__ == "__main__":
-  render_shopping_cart_page()
+    main()
