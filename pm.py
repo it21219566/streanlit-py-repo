@@ -15,8 +15,8 @@ def main():
     st.title("Shopping Cart")
     st.write("## Welcome to the Shopping Cart")
 
-    menu = ["Your Cart","Shipping","Billing","Order Summary"]
-    choice = st.sidebar.selectbox("Menu",menu)
+    menu = ["Your Cart", "Shipping", "Billing", "Order Summary"]
+    choice = st.sidebar.selectbox("Menu", menu)
 
     if choice == "Your Cart":
         st.subheader("Your Cart")
@@ -47,9 +47,11 @@ def main():
 
         # Create a shipping details form
         with st.form("shipping_details_form"):
-            col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)  # Create two columns here
+
             with col1:
                 first_name = st.text_input("First Name")
+
             with col2:
                 last_name = st.text_input("Last Name")
 
@@ -60,7 +62,7 @@ def main():
             submitted = st.form_submit_button("Submit Shipping Details")
 
         if submitted:
-            # Need to store the shipping details in a dictionary or a database......
+            # Need to store the shipping details in a dictionary or a database...
             shipping_details = {
                 "First Name": first_name,
                 "Last Name": last_name,
@@ -69,13 +71,13 @@ def main():
                 "Phone": phone,
             }
             st.success("Shipping details submitted successfully!")
-            # Need to redirect to the next step (e.g., Billing)......
-        
+            # Need to redirect to the next step (e.g., Billing)...
+
     elif choice == "Billing":
         st.subheader("Billing")
 
     else:
-        st.subheader("Oreder Summery")
-    
+        st.subheader("Order Summary")
+
 if __name__ == "__main__":
     main()
