@@ -43,7 +43,7 @@ def main():
         st.write(f"**Total Cost: ${total_cost:.2f}**")
 
     elif choice == "Shipping":
-        st.subheader("Shipping Address")
+        st.subheader("Shipping")
 
         # Create a shipping details form
         with st.form("shipping_details_form"):
@@ -74,7 +74,7 @@ def main():
             # Need to redirect to the next step (e.g., Billing)...
 
     elif choice == "Billing":
-        st.subheader("Billing Address")
+        st.subheader("Billing")
 
         # Billing Details form
         with st.form("billing_details_form"):
@@ -103,8 +103,6 @@ def main():
             }
             st.success("Billing details submitted successfully!")
 
-        st.subheader("Payment Details")
-        # Payment details form
         with st.form("payment_details_form"):
             # Create a payment details form
             credit_card_number = st.text_input("Credit Card Number")
@@ -123,8 +121,33 @@ def main():
                 st.success("Payment details submitted successfully!")
                 # Need to process the payment...
 
-    else:
+    elif choice == "Order Summary":
         st.subheader("Order Summary")
+
+        st.write("### Products in Cart")
+        for product, qty in cart.items():
+            st.write(f"{product}: {qty} items at ${products[product]:.2f} each")
+
+        subtotal = sum(products[product] * qty for product, qty in cart.items())
+        st.write(f"**Subtotal: ${subtotal:.2f}**")
+
+        # Display the shipping address from the previous step
+        if 'shipping_details' in st.session_state:
+            st.write("### Shipping Address")
+            shipping_details = st.session_state['shipping_details']
+            st.write(f"First Name: {shipping_details['First Name']}")
+            st.write(f"Last Name: {shipping_details['Last Name']}")
+            st.write(f"Address: {shipping_details['Address']}")
+            st.write(f"Email: {shipping_details['Email']}")
+            st.write(f"Phone: {shipping_details['Phone']}")
+
+        # You can add logic for applying a discount here if needed
+        discount = 0.00  # Placeholder for discount amount
+
+        st.write(f"**Discount: ${discount:.2f}**")
+
+        order_total = subtotal - discount
+        st.write(f"**Order Total: ${order_total:.2f}**")
 
 if __name__ == "__main__":
     main()
