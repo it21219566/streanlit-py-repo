@@ -10,12 +10,12 @@ choice = st.sidebar.selectbox("Menu",menu)
 if choice == "Add New Item":
         st.subheadder("New Item")
 
-    elif choice == "Item List":
+elif choice == "Item List":
         st.subheader("View Items")
-    elif choice == "Update":
+elif choice == "Update":
         st.subheader("Update Item")
-    elif choice == "Delete":
+elif choice == "Delete":
         st.subheader("Delete Item")
         
-    else:
+else:
         st.subheader("About")
