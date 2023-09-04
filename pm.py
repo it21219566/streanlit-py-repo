@@ -2,57 +2,45 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# Create a list of products
-products = pd.DataFrame({
-    "Product Name": ["Fifa 19", "Glacier White 500GB", "Platinum Headset"],
-    "Price": [44, 249.99, 119.99],
-    "Quantity": [1, 1, 1]
-})
+def load_product_data():
+  """Loads the product data into a Pandas DataFrame."""
+  data = pd.read_csv("products.csv")
+  return data
 
-# Create a function to display the shopping cart
-def show_shopping_cart():
-    st.title("Shopping Cart")
-    st.table(products)
-    st.markdown("Order Summary")
-    st.subheader("Price")
-    st.text(f"£{products['Price'].sum()}")
-    st.subheader("Shipping")
-    st.text("Standard Delivery - £5.00")
-    st.subheader("Promo Code")
-    st.text("")
-    st.text("Enter code")
-    st.text("")
-    st.text("Apply")
+def render_shopping_cart_page():
+  """Renders the shopping cart page."""
+  # Header
+  st.header("Shopping Cart")
 
-# Create a function to add a product to the shopping cart
-def add_product_to_cart(product_name):
-    products.loc[products['Product Name'] == product_name, 'Quantity'] += 1
+  # Search bar
+  search_term = st.text_input("Search for products:")
 
-# Create a function to remove a product from the shopping cart
-def remove_product_from_cart(product_name):
-    products.loc[products['Product Name'] == product_name, 'Quantity'] -= 1
+  # Product list
+  products = load_product_data()
+  if search_term:
+    products = products[products["name"].str.contains(search_term)]
 
-# Create a function to apply a promo code
-def apply_promo_code(promo_code):
-    if promo_code == "10OFF":
-        products['Price'] = products['Price'] * 0.9
+  st.table(products)
 
-# Create a function to checkout
-def checkout():
-    st.write("Thank you for your purchase!")
+  # Total price
+  total_price = 0
+  for product in products.itertuples():
+    total_price += product[2]
 
-# Run the Streamlit app
-st.title("Shopping Cart")
-show_shopping_cart()
+  st.write("Total price: $", total_price)
 
-# Add product to cart button
-st.button("Add Product to Cart", key="add_product")
+  # Shipping and billing information
+  shipping_address = st.text_input("Shipping address:")
+  billing_address = st.text_input("Billing address:")
 
-# Remove product from cart button
-st.button("Remove Product from Cart", key="remove_product")
+  # Order summary
+  st.write("Order summary:")
+  st.write("Shipping address:", shipping_address)
+  st.write("Billing address:", billing_address)
+  st.write("Total price: $", total_price)
 
-# Apply promo code button
-st.button("Apply Promo Code", key="apply_promo_code")
+  # Checkout button
+  st.button("Checkout")
 
-# Checkout button
-st.button("Checkout", key="checkout")
+if __name__ == "__main__":
+  render_shopping_cart_page()
