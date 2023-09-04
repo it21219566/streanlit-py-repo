@@ -47,7 +47,7 @@ def main():
 
         # Create a shipping details form
         with st.form("shipping_details_form"):
-            col1, col2 = st.beta_columns(2)
+            col1, col2 = st.columns(2)
             with col1:
                 first_name = st.text_input("First Name")
             with col2:
