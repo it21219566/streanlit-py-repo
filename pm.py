@@ -42,7 +42,7 @@ def main():
         total_cost = sum(products[product] * qty for product, qty in cart.items())
         st.write(f"**Total Cost: ${total_cost:.2f}**")
 
-    elif choice == "Shippng":
+    elif choice == "Shipping":
         st.subheader("Shipping")
         
     elif choice == "Billing":
