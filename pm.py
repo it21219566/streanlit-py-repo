@@ -13,6 +13,8 @@ cart = {}
 # Streamlit app
 def main():
     st.title("Shopping Cart Web App")
+    st.write("## Welcome to the Shopping Cart Web App")
+    st.write("Browse products on the left sidebar and add them to your cart.")
 
     menu = ["Add New Item","Item List","Update","Delete","About"]
     choice = st.sidebar.selectbox("Menu",menu)
@@ -35,9 +37,6 @@ def main():
 
     total_cost = sum(products[product] * qty for product, qty in cart.items())
     st.write(f"**Total Cost: ${total_cost:.2f}**")
-
-    st.write("## Welcome to the Shopping Cart Web App")
-    st.write("Browse products on the left sidebar and add them to your cart.")
 
 if __name__ == "__main__":
     main()
