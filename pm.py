@@ -19,24 +19,36 @@ def main():
     menu = ["Your Cart","Shipping","Billing","Order Summary"]
     choice = st.sidebar.selectbox("Menu",menu)
 
-    selected_product = st.selectbox("Select a product:", list(products.keys()))
-    quantity = st.number_input("Quantity:", 1, 100, 1)
+    if choice == "Your Cart":
+        st.subheader("Your Cart")
 
-    if st.button("Add to Cart"):
-        if selected_product in cart:
-            cart[selected_product] += quantity
-        else:
-            cart[selected_product] = quantity
+        selected_product = st.selectbox("Select a product:", list(products.keys()))
+        quantity = st.number_input("Quantity:", 1, 100, 1)
 
-    if st.button("Clear Cart"):
-        cart.clear()
+        if st.button("Add to Cart"):
+            if selected_product in cart:
+                cart[selected_product] += quantity
+            else:
+                cart[selected_product] = quantity
 
-    st.write("### Cart")
-    for product, qty in cart.items():
-        st.write(f"{product}: {qty} items")
+        if st.button("Clear Cart"):
+            cart.clear()
 
-    total_cost = sum(products[product] * qty for product, qty in cart.items())
-    st.write(f"**Total Cost: ${total_cost:.2f}**")
+        st.write("### Cart")
+        for product, qty in cart.items():
+            st.write(f"{product}: {qty} items")
 
+        total_cost = sum(products[product] * qty for product, qty in cart.items())
+        st.write(f"**Total Cost: ${total_cost:.2f}**")
+
+    elif choice == "Shippng":
+        st.subheader("Shipping")
+        
+    elif choice == "Billing":
+        st.subheader("Billing")
+
+    else:
+        st.subheader("Oreder Summery")
+    
 if __name__ == "__main__":
     main()
