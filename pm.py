@@ -15,12 +15,10 @@ def main():
     st.title("Shopping Cart Web App")
 
     st.sidebar.header("Products")
-    st.sidebar.subheader("Add to Cart:")
-    
     selected_product = st.sidebar.selectbox("Select a product:", list(products.keys()))
     quantity = st.sidebar.number_input("Quantity:", 1, 100, 1)
-    
-    if st.sidebar.button("Add"):
+
+    if st.sidebar.button("Add to Cart"):
         if selected_product in cart:
             cart[selected_product] += quantity
         else:
@@ -28,8 +26,8 @@ def main():
 
     if st.sidebar.button("Clear Cart"):
         cart.clear()
-    
-    st.sidebar.subheader("Cart:")
+
+    st.sidebar.header("Cart")
     for product, qty in cart.items():
         st.sidebar.write(f"{product}: {qty} items")
 
