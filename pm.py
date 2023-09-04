@@ -23,7 +23,8 @@ def main():
         st.write("Manage your cart, Add or remove products from the cart.")
 
         selected_product = st.selectbox("Select a product:", list(products.keys()))
-        quantity = st.number_input("Quantity:", 1, 100, 1)
+        quantity = st.slider("Quantity:", 0, 100, 50)
+        st.write(f'Quantity {quantity}')
 
         if st.button("Add to Cart"):
             if selected_product in cart:
