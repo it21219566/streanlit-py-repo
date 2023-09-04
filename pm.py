@@ -21,3 +21,6 @@ def main():
         
     else:
         st.subheader("About")
+
+if __name__ == ' main ':
+    main()
