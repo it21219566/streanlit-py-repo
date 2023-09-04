@@ -17,6 +17,13 @@ def main():
     st.write("## Welcome to the Shopping Cart Web App")
     st.write("Browse products and add them to your cart.")
 
+    new_product_name = st.text_input("Enter a new product name:")
+    new_product_price = st.number_input("Enter the product price:", 0.01, 1000.00, 1.00)
+
+    if st.button("Add New Product"):
+        if new_product_name:
+            products[new_product_name] = new_product_price
+
     selected_product = st.selectbox("Select a product:", list(products.keys()))
     quantity = st.number_input("Quantity:", 1, 100, 1)
 
