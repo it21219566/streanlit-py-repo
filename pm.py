@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
-from random import choice
+import pandas as pt
 
 st.title('Cart')
