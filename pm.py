@@ -76,6 +76,42 @@ def main():
     elif choice == "Billing":
         st.subheader("Billing")
 
+        # Billing Details form
+         with st.form("billing_details_form"):
+            col1, col2 = st.columns(2)  # Create two columns here
+
+                with col1:
+                    st.write("Biiling Details")
+                    col3, col4 = st.columns(2)
+                        with col3:
+                             st.write(first_name)
+
+                        with col4:
+                             st.write(last_name)
+
+                        st.text_area(address)
+                        st.text_input(email)
+                        st.text_input(phone)
+
+                with col2:
+                    # Create a payment details form
+                    with st.form("payment_details_form"):
+                        credit_card_number = st.text_input("Credit Card Number")
+                        expiration_date = st.text_input("Expiration Date (MM/YY)")
+                        cvv = st.number_input("CVV", min_value=0, step=1)
+
+                    submitted = st.form_submit_button("Submit Payment Details")
+
+                    if submitted:
+                        # Need to store the payment details in a secure manner...
+                        payment_details = {
+                            "Credit Card Number": credit_card_number,
+                            "Expiration Date": expiration_date,
+                            "CVV": cvv,
+                        }
+                        st.success("Payment details submitted successfully!")
+                        # Need to process the payment...
+
     else:
         st.subheader("Order Summary")
 
