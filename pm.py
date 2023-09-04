@@ -1,40 +1,58 @@
 import streamlit as st
+import pandas as pd
+import numpy as np
 
-# Create a dictionary to store product information
-products = {
-    'Product 1': 10.00,
-    'Product 2': 15.00,
-    'Product 3': 20.00,
-}
+# Create a list of products
+products = pd.DataFrame({
+    "Product Name": ["Fifa 19", "Glacier White 500GB", "Platinum Headset"],
+    "Price": [44, 249.99, 119.99],
+    "Quantity": [1, 1, 1]
+})
 
-# Initialize an empty cart
-cart = {}
+# Create a function to display the shopping cart
+def show_shopping_cart():
+    st.title("Shopping Cart")
+    st.table(products)
+    st.markdown("Order Summary")
+    st.subheader("Price")
+    st.text(f"£{products['Price'].sum()}")
+    st.subheader("Shipping")
+    st.text("Standard Delivery - £5.00")
+    st.subheader("Promo Code")
+    st.text("")
+    st.text("Enter code")
+    st.text("")
+    st.text("Apply")
 
-# Streamlit app
-def main():
-    st.title("Shopping Cart Web App")
+# Create a function to add a product to the shopping cart
+def add_product_to_cart(product_name):
+    products.loc[products['Product Name'] == product_name, 'Quantity'] += 1
 
-    st.write("## Welcome to the Shopping Cart Web App")
-    st.write("Browse products and add them to your cart.")
+# Create a function to remove a product from the shopping cart
+def remove_product_from_cart(product_name):
+    products.loc[products['Product Name'] == product_name, 'Quantity'] -= 1
 
-    selected_product = st.selectbox("Select a product:", list(products.keys()))
-    quantity = st.number_input("Quantity:", 1, 100, 1)
+# Create a function to apply a promo code
+def apply_promo_code(promo_code):
+    if promo_code == "10OFF":
+        products['Price'] = products['Price'] * 0.9
 
-    if st.button("Add to Cart"):
-        if selected_product in cart:
-            cart[selected_product] += quantity
-        else:
-            cart[selected_product] = quantity
+# Create a function to checkout
+def checkout():
+    st.write("Thank you for your purchase!")
 
-    if st.button("Clear Cart"):
-        cart.clear()
+# Run the Streamlit app
+st.title("Shopping Cart")
+show_shopping_cart()
 
-    st.write("### Cart")
-    for product, qty in cart.items():
-        st.write(f"{product}: {qty} items")
+# Add product to cart button
+st.button("Add Product to Cart", key="add_product")
 
-    total_cost = sum(products[product] * qty for product, qty in cart.items())
-    st.write(f"**Total Cost: ${total_cost:.2f}**")
+# Remove product from cart button
+st.button("Remove Product from Cart", key="remove_product")
 
-if __name__ == "__main__":
-    main()
+# Apply promo code button
+st.button("Apply Promo Code", key="apply_promo_code")
+
+# Checkout button
+st.button("Checkout", key="checkout")
