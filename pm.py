@@ -77,7 +77,7 @@ def main():
         st.subheader("Billing")
 
         # Billing Details form
-         with st.form("billing_details_form"):
+        with st.form("billing_details_form"):
             col1, col2 = st.columns(2)  # Create two columns here
 
             with col1:
@@ -90,37 +90,36 @@ def main():
             email = st.text_input("Email")
             phone = st.text_input("Phone")
 
-            submitted = st.form_submit_button("Submit Shipping Details")
+            submitted = st.form_submit_button("Submit Billing Details")
+
+        if submitted:
+            # Need to store the billing details in a dictionary or a database...
+            billing_details = {
+                "First Name": first_name,
+                "Last Name": last_name,
+                "Address": address,
+                "Email": email,
+                "Phone": phone,
+            }
+            st.success("Billing details submitted successfully!")
+
+        with st.form("payment_details_form"):
+            # Create a payment details form
+            credit_card_number = st.text_input("Credit Card Number")
+            expiration_date = st.text_input("Expiration Date (MM/YY)")
+            cvv = st.number_input("CVV", min_value=0, step=1)
+
+            submitted = st.form_submit_button("Submit Payment Details")
 
             if submitted:
-                # Need to store the shipping details in a dictionary or a database...
-                shipping_details = {
-                    "First Name": first_name,
-                    "Last Name": last_name,
-                    "Address": address,
-                    "Email": email,
-                    "Phone": phone,
+                # Need to store the payment details in a secure manner...
+                payment_details = {
+                    "Credit Card Number": credit_card_number,
+                    "Expiration Date": expiration_date,
+                    "CVV": cvv,
                 }
-                st.success("Shipping details submitted successfully!")
-
-         with col2:
-            # Create a payment details form
-            with st.form("payment_details_form"):
-                credit_card_number = st.text_input("Credit Card Number")
-                expiration_date = st.text_input("Expiration Date (MM/YY)")
-                cvv = st.number_input("CVV", min_value=0, step=1)
-
-                submitted = st.form_submit_button("Submit Payment Details")
-
-                if submitted:
-                    # Need to store the payment details in a secure manner...
-                    payment_details = {
-                        "Credit Card Number": credit_card_number,
-                        "Expiration Date": expiration_date,
-                        "CVV": cvv,
-                    }
-                    st.success("Payment details submitted successfully!")
-                    # Need to process the payment...
+                st.success("Payment details submitted successfully!")
+                # Need to process the payment...
 
     else:
         st.subheader("Order Summary")
