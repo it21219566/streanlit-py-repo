@@ -14,13 +14,13 @@ cart = {}
 def main():
     st.title("Shopping Cart")
     st.write("## Welcome to the Shopping Cart")
-    st.write("Manage your cart, Add or remove products from the cart.")
 
     menu = ["Your Cart","Shipping","Billing","Order Summary"]
     choice = st.sidebar.selectbox("Menu",menu)
 
     if choice == "Your Cart":
         st.subheader("Your Cart")
+        st.write("Manage your cart, Add or remove products from the cart.")
 
         selected_product = st.selectbox("Select a product:", list(products.keys()))
         quantity = st.number_input("Quantity:", 1, 100, 1)
