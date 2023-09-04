@@ -12,9 +12,9 @@ cart = {}
 
 # Streamlit app
 def main():
-    st.title("Shopping Cart Web App")
-    st.write("## Welcome to the Shopping Cart Web App")
-    st.write("Browse products on the left sidebar and add them to your cart.")
+    st.title("Shopping Cart")
+    st.write("## Welcome to the Shopping Cart")
+    st.write("Manage your cart, Add or remove products from the cart.")
 
     menu = ["Your Cart","Shipping","Billing","Order Summary"]
     choice = st.sidebar.selectbox("Menu",menu)
