@@ -44,6 +44,32 @@ def main():
 
     elif choice == "Shipping":
         st.subheader("Shipping")
+
+        # Create a shipping details form
+        with st.form("shipping_details_form"):
+            col1, col2 = st.beta_columns(2)
+            with col1:
+                first_name = st.text_input("First Name")
+            with col2:
+                last_name = st.text_input("Last Name")
+
+            address = st.text_area("Address")
+            email = st.text_input("Email")
+            phone = st.text_input("Phone")
+
+            submitted = st.form_submit_button("Submit Shipping Details")
+
+        if submitted:
+            # Need to store the shipping details in a dictionary or a database......
+            shipping_details = {
+                "First Name": first_name,
+                "Last Name": last_name,
+                "Address": address,
+                "Email": email,
+                "Phone": phone,
+            }
+            st.success("Shipping details submitted successfully!")
+            # Need to redirect to the next step (e.g., Billing)......
         
     elif choice == "Billing":
         st.subheader("Billing")
