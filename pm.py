@@ -16,7 +16,7 @@ def main():
     st.write("## Welcome to the Shopping Cart Web App")
     st.write("Browse products on the left sidebar and add them to your cart.")
 
-    menu = ["Add New Item","Item List","Update","Delete","About"]
+    menu = ["Your Cart","Shipping","Billing","Order Summary"]
     choice = st.sidebar.selectbox("Menu",menu)
 
     selected_product = st.selectbox("Select a product:", list(products.keys()))
