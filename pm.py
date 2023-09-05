@@ -1,14 +1,51 @@
 import streamlit as st
+import sqlite3
 
-# Create a dictionary to store product information
-products = {
-    'Product 1': 10.00,
-    'Product 2': 15.00,
-    'Product 3': 20.00,
-}
+# Create a SQLite database or connect to an existing one
+conn = sqlite3.connect("shopping_cart.db")
+cursor = conn.cursor()
 
-# Initialize an empty cart
-cart = {}
+# Create a Products table if it doesn't exist
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS products (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        price REAL
+    )
+""")
+
+# Create a Cart table if it doesn't exist
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS cart (
+        id INTEGER PRIMARY KEY,
+        product_id INTEGER,
+        quantity INTEGER
+    )
+""")
+
+# Function to add a product to the cart
+def add_to_cart(product_id, quantity):
+    cursor.execute("INSERT INTO cart (product_id, quantity) VALUES (?, ?)", (product_id, quantity))
+    conn.commit()
+
+# Function to retrieve all products
+def get_products():
+    cursor.execute("SELECT * FROM products")
+    return cursor.fetchall()
+
+# Function to retrieve items in the cart
+def get_cart_items():
+    cursor.execute("""
+        SELECT cart.id, products.name, products.price, cart.quantity
+        FROM cart
+        INNER JOIN products ON cart.product_id = products.id
+    """)
+    return cursor.fetchall()
+
+# Function to clear the cart
+def clear_cart():
+    cursor.execute("DELETE FROM cart")
+    conn.commit()
 
 # Streamlit app
 def main():
@@ -22,25 +59,33 @@ def main():
         st.subheader("Your Cart")
         st.write("Manage your cart, Add or remove products from the cart.")
 
-        selected_product = st.selectbox("Select a product:", list(products.keys()))
-        quantity = st.slider("Quantity:", 0, 100, 50)
-        st.write(f'Quantity {quantity}')
+        # Add products to the database (you can customize this)
+        if st.button("Add Sample Products"):
+            cursor.executemany("INSERT INTO products (name, price) VALUES (?, ?)", [("Product 1", 10.0), ("Product 2", 15.0)])
+            conn.commit()
 
-        if st.button("Add to Cart"):
-            if selected_product in cart:
-                cart[selected_product] += quantity
-            else:
-                cart[selected_product] = quantity
-
-        if st.button("Clear Cart"):
-            cart.clear()
+        # Display available products
+        st.subheader("Available Products")
+        products = get_products()
+        for product in products:
+            product_id, name, price = product
+            if st.button(f"Add to Cart: {name} - ${price}", key=f"add_to_cart_{product_id}"):
+                quantity = st.number_input(f"Quantity for {name}", min_value=1, value=1)
+                add_to_cart(product_id, quantity)
 
         st.write("### Cart")
-        for product, qty in cart.items():
-            st.write(f"{product}: {qty} items")
+        cart_items = get_cart_items()
+        for cart_item in cart_items:
+            cart_id, name, price, quantity = cart_item
+            st.write(f"{name}: {quantity} items")
 
-        total_cost = sum(products[product] * qty for product, qty in cart.items())
+        total_cost = sum(price * quantity for _, _, price, quantity in cart_items)
         st.write(f"**Total Cost: ${total_cost:.2f}**")
+
+        # Add a button to clear the cart
+        if st.button("Clear Cart"):
+            clear_cart()
+            st.success("Cart has been cleared.")
 
     elif choice == "Shipping":
         st.subheader("Shipping Address")
@@ -50,81 +95,30 @@ def main():
             col1, col2 = st.columns(2)  # Create two columns here
 
             with col1:
-                first_name = st.text_input("First Name")
+                shipping_first_name = st.text_input("First Name")
 
             with col2:
-                last_name = st.text_input("Last Name")
+                shipping_last_name = st.text_input("Last Name")
 
-            address = st.text_area("Address")
-            email = st.text_input("Email")
-            phone = st.text_input("Phone")
+            shipping_address = st.text_area("Address")
+            shipping_email = st.text_input("Email")
+            shipping_phone = st.text_input("Phone")
 
             submitted = st.form_submit_button("Submit Shipping Details")
 
         if submitted:
             # Need to store the shipping details in a dictionary or a database...
             shipping_details = {
-                "First Name": first_name,
-                "Last Name": last_name,
-                "Address": address,
-                "Email": email,
-                "Phone": phone,
+                "First Name": shipping_first_name,
+                "Last Name": shipping_last_name,
+                "Address": shipping_address,
+                "Email": shipping_email,
+                "Phone": shipping_phone,
             }
             st.success("Shipping details submitted successfully!")
             # Need to redirect to the next step (e.g., Billing)...
 
-    elif choice == "Billing":
-        st.subheader("Billing Address")
-
-        # Billing Details form
-        with st.form("billing_details_form"):
-            col1, col2 = st.columns(2)  # Create two columns here
-
-            with col1:
-                first_name = st.text_input("First Name")
-
-            with col2:
-                last_name = st.text_input("Last Name")
-
-            address = st.text_area("Address")
-            email = st.text_input("Email")
-            phone = st.text_input("Phone")
-
-            submitted = st.form_submit_button("Submit Billing Details")
-
-        if submitted:
-            # Need to store the billing details in a dictionary or a database...
-            billing_details = {
-                "First Name": first_name,
-                "Last Name": last_name,
-                "Address": address,
-                "Email": email,
-                "Phone": phone,
-            }
-            st.success("Billing details submitted successfully!")
-
-        st.subheader("Payment Details")
-        # Payment details form
-        with st.form("payment_details_form"):
-            # Create a payment details form
-            credit_card_number = st.text_input("Credit Card Number")
-            expiration_date = st.text_input("Expiration Date (MM/YY)")
-            cvv = st.number_input("CVV", min_value=0, step=1)
-
-            submitted = st.form_submit_button("Submit Payment Details")
-
-            if submitted:
-                # Need to store the payment details in a secure manner...
-                payment_details = {
-                    "Credit Card Number": credit_card_number,
-                    "Expiration Date": expiration_date,
-                    "CVV": cvv,
-                }
-                st.success("Payment details submitted successfully!")
-                # Need to process the payment...
-
-    else:
-        st.subheader("Order Summary")
+    # Add similar code for Billing and Order Summary sections
 
 if __name__ == "__main__":
     main()
